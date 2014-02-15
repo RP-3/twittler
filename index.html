@@ -6,8 +6,11 @@
     <script src="jquery.timeago.js"></script>
   </head>
   <body>
-    <button id="refresh">Refresh</button>
-    <button id="checkMail">Check Mail</button>
+    <div id="controls">
+      <button id="refresh">Refresh</button>
+      <button id="checkMail">Check Mail</button>
+    </div>
+    <div id="userBank"></div>
     <div id="newTweets"></div>
     <div id="twittlerBoard"></div>
     <script>
@@ -16,18 +19,26 @@
         var $body = $('#twittlerBoard');
         $body.html('');
 
+        jQuery("abbr.timeago").timeago();       
+
         var tweetTally; //used to store the number of displayed tweets
 
-
-
-        var refresh = function(){
+        var refresh = function(user){
           var index = streams.home.length - 1;
           tweetTally = index;
           while(index >= 0){
             var tweet = streams.home[index];
             var $tweet = $('<div></div>');
-            $tweet.text('@' + tweet.user + ': ' + tweet.message +" (at " + tweet.created_at + ")");
-            $tweet.appendTo($body);
+            var timeStamp = tweet.created_at;
+            if (user === undefined){
+              $tweet.text('@' + tweet.user + ': ' + tweet.message+" on "+timeStamp);
+              $body.append($tweet);              
+            } else {
+              if (tweet.user === user){
+              $tweet.text('@' + tweet.user + ': ' + tweet.message+" on "+timeStamp);
+              $body.append($tweet);                  
+              }
+            }
             index -= 1;
           } 
         };
@@ -42,6 +53,18 @@
 
         $("#checkMail").on('click', tweetChecker);
 
+        //set up buttons for each user. Each will show it's user's tweets
+        for ( var i=0; i<users.length; i++){
+          var user = 
+          $("<button class='userButton 'id='" +users[i]+"'>"+users[i]+"</button>");
+          $("#userBank").append(user);
+        }; 
+
+        $(".userButton").on('click', function(){ //show only tweets of selected user
+          $body.html('');
+          var userToList = $(this).attr('id');
+          refresh(userToList);
+        });
 
         refresh();
 
