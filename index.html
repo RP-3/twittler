@@ -6,6 +6,8 @@
   </head>
   <body>
     <button id="refresh">Refresh</button>
+    <button id="checkMail">Check Mail</button>
+    <div id="newTweets"></div>
     <div id="twittlerBoard"></div>
     <script>
 
@@ -13,7 +15,7 @@
         var $body = $('#twittlerBoard');
         $body.html('');
 
-        var tweetTally; //used to store the number of 
+        var tweetTally; //used to store the number of displayed tweets
 
         var refresh = function(){
           var index = streams.home.length - 1;
@@ -31,10 +33,12 @@
 
         var tweetChecker = function(){
           var totalTweets = streams.home.length - 1;
-          if (totalTweets > tweetTally) {
-
-          };
+          var newTweets = totalTweets - tweetTally;
+          $("#newTweets").text(newTweets + " new tweets!");
         };
+
+        $("#checkMail").on('click', tweetChecker);
+
 
         refresh();
 
