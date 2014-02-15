@@ -5,20 +5,38 @@
     <script src="data_generator.js"></script>
   </head>
   <body>
+    <button id="refresh">Refresh</button>
+    <div id="twittlerBoard"></div>
     <script>
 
       $(document).ready(function(){
-        var $body = $('body');
+        var $body = $('#twittlerBoard');
         $body.html('');
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
-        }
+        var tweetTally; //used to store the number of 
+
+        var refresh = function(){
+          var index = streams.home.length - 1;
+          tweetTally = index;
+          while(index >= 0){
+            var tweet = streams.home[index];
+            var $tweet = $('<div></div>');
+            $tweet.text('@' + tweet.user + ': ' + tweet.message);
+            $tweet.appendTo($body);
+            index -= 1;
+          } 
+        };
+
+        $("#refresh").on('click',refresh);
+
+        var tweetChecker = function(){
+          var totalTweets = streams.home.length - 1;
+          if (totalTweets > tweetTally) {
+
+          };
+        };
+
+        refresh();
 
       });
 
