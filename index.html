@@ -8,7 +8,6 @@
   <body>
     <div id="controls">
       <button id="refresh">Refresh</button>
-      <button id="checkMail">Check Mail</button>
     </div>
     <div id="userBank"></div>
     <div id="newTweets"></div>
@@ -35,7 +34,7 @@
               $body.append($tweet);              
             } else {
               if (tweet.user === user){
-              $tweet.text('@' + tweet.user + ': ' + tweet.message+" on "+timeStamp);
+              $tweet.text(tweet.message+" on "+timeStamp);
               $body.append($tweet);                  
               }
             }
@@ -45,13 +44,15 @@
 
         $("#refresh").on('click',refresh);
 
-        var tweetChecker = function(){
+        // check for new tweets since index last updated by refresh
+        var tweetChecker = function(){ 
           var totalTweets = streams.home.length - 1;
           var newTweets = totalTweets - tweetTally;
           $("#newTweets").text(newTweets + " new tweets!");
         };
 
-        $("#checkMail").on('click', tweetChecker);
+        //Automatically show number of new tweets 
+        setInterval(tweetChecker, 5000);
 
         //set up buttons for each user. Each will show it's user's tweets
         for ( var i=0; i<users.length; i++){
@@ -60,9 +61,10 @@
           $("#userBank").append(user);
         }; 
 
-        $(".userButton").on('click', function(){ //show only tweets of selected user
-          $body.html('');
+        //reset body to show only tweets of selected user
+        $(".userButton").on('click', function(){ 
           var userToList = $(this).attr('id');
+          $body.html(userToList + "'s tweets:");
           refresh(userToList);
         });
 
