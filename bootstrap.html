@@ -73,7 +73,13 @@
 
           //create a tweet varible with the text of the tweet and time
           var $tweet = $("<div></div>");
-          $tweet.text('@' + tweet.user + ': ' + tweet.message + "(" + $timeStamp + ")");
+
+          //create a current-user link to be inserted into each tweet
+          var userLink = 
+          $("<button class='userButton 'data-userId='" +tweet.user+"'>@"+tweet.user+"</button>");
+
+          $tweet.text(': ' + tweet.message + "(" + $timeStamp + ")");
+          $tweet.prepend(userLink);
 
           //create a rendering variable containing the previous two and 
           //append it to $body
@@ -117,14 +123,14 @@
         //set up buttons for each user. Each will show it's user's tweets
         for ( var i=0; i<users.length; i++){
           var user = 
-          $("<button class='userButton 'id='" +users[i]+"'>"+users[i]+"</button>");
+          $("<button class='userButton 'data-userId='" +users[i]+"'>"+users[i]+"</button>");
           $("#userBank").append(user);
         }; 
 
         //reset body to show only tweets of selected user
-        $(".userButton").on('click', function(el){ 
+        $(document.body).on('click', '.userButton', function(el){ 
           el.preventDefault();
-          var userToList = $(this).attr('id');
+          var userToList = $(this).attr('data-userId');
           $body.html(userToList + "'s tweets:");
           refresh(userToList);
         });
